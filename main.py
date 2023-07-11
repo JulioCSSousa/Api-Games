@@ -27,8 +27,25 @@ def insert_game():
     return (jsonify(message='game cadastred sucefully', Game=games)
     )
 
-def delete_game():
-    game = request.json
-    games.remove()
+@app.route('/games/<int:id>', methods=['GET'])
+def find_game_id(id):
+    for game in games:
+        if game.get('id') == id:
+            return jsonify(game)
+
+@app.route('/games/<int:id>',methods=["PUT"])
+def game_edit_id(id):
+    edited_game = request.get_json()
+    for key, game in enumerate(games):
+        if game.get('id') == id:
+            games[key].update(edited_game)
+        return jsonify(games)
+
+@app.route('/games/<int:id>',methods=["DELETE"])
+def game_delete_id(id):
+    for key, game in enumerate(games):
+        if game.get('id') == id:
+            del games[key]
+    return jsonify(games)
 
 app.run()
